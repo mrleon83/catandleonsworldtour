@@ -95,7 +95,6 @@ class users extends Controller{
 				$data['email_err'] = 'Please enter email';
 			}
 
-
 			if(empty($data['password'])){
 				$data['password_err'] = 'Please enter password';
 			}elseif(strlen($data['password'] < 6)){
@@ -147,7 +146,5 @@ class users extends Controller{
 		session_destroy();
 		redirect(URLROOT);
 	}
-
-
 
 }

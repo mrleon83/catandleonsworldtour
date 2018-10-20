@@ -3,9 +3,9 @@ class Posts extends Controller{
 	public function __construct(){
 		//only if want to show blogs to people that are logged in only
 		if(!loggedIn()){
-			redirect('users/login');
+			//
+			redirect('/index');
 		}
-
 		$this->postModel = $this->model('post');
 		$this->userModel = $this->model('User');
 	}
@@ -135,8 +135,6 @@ class Posts extends Controller{
 			'user' => $user
 		];
 		$this->view('posts/show', $data);
-
-
 	}
 
 }
