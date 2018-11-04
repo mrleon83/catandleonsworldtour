@@ -14,17 +14,17 @@
             <a class="nav-link" href="<?php echo URLROOT;?>/pages/about">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="<?php echo URLROOT;?>/pages/blogs">Blogs</a>
+            <a class="nav-link" href="<?php echo URLROOT;?>/blogs">Blogs</a>
           </li>
         </ul>
 
         <ul class="navbar-nav ml-auto">
         <?php if(isset($_SESSION['user_id'])) : ?>
-          <li class="nav-item">
+          <li class="nav-item" style="background-color: orange; border-radius: 10px;">
             <a class="nav-link" href="<?php echo URLROOT;?>users/logout">Logout</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="<?php echo URLROOT;?>/pages/posts">Admin</a>
+          <li class="nav-item" style="background-color: orange; border-radius: 10px;">
+            <a class="nav-link" href="<?php echo URLROOT;?>/posts">Admin</a>
           </li>
           <?php else : ?>
 

@@ -6,6 +6,7 @@
 	</div>
 </div>
 <?php foreach($data['posts'] as $post) : ?>
+	
 	<div class="card card-body mb-3">
 		<h4 class="card-title">
 			<?php echo $post->title ?>
@@ -14,6 +15,8 @@
 			Written By <?php echo $post->name ?> on <?php echo $post->created ?>
 		</div>
 		<p class="card-text"><?php echo $post->body ?></p>
+		<p cass="card-text"><?php echo $post->file_location;?></p>
+
 	</div> 
 <?php endforeach; ?>
 

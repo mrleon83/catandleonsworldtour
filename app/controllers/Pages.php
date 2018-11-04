@@ -5,10 +5,6 @@ class Pages extends Controller{
 		
 	}
 	public function index(){
-		if(loggedIn()){
-			redirect('posts');
-		}
-
 		$data = ['title' =>'Cat & Leon\'s World Tour'];
 		$this->view('pages/index', $data);
 

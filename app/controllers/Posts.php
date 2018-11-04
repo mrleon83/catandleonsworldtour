@@ -12,47 +12,87 @@ class Posts extends Controller{
 
 	public function index(){
 		$posts = $this->postModel->getPosts();
-
+		$countries = $this->postModel->getCountries();
 		$data = [
-			'posts' => $posts
+			'posts' => $posts,
+			'countries' => $countries
 		];
 		$this->view('posts/index', $data);
 	}
 
 	public function add(){
+		$countries = $this->postModel->getCountries();
+		$sub_country = $this->postModel->getSubCountries();
+
 		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+			//file upload , maybe put this in a function and call from add script
+			$fileExtensions =['jpeg', 'jpg', 'png'];
+			$targetDir = APPROOT . "/uploads";
+			$targetFile = $targetDir . basename($_FILES['file_upload']['name']);
+			$fileTmpName = $_FILES['file_upload']['tmp_name'];
+			$fileName = $_FILES['file_upload']['name'];
+			$fileNameSql = trim($_POST['title'] . "_image");
+			
+			$fileExtension = explode('.', $fileName);
+			//upload these to image db
+			$fileLocation =  'uploads/' . $fileName;
+
+			if(in_array($fileExtension['1'], $fileExtensions)){
+				$upload_file = move_uploaded_file($fileTmpName, "$targetDir/$fileName");
+			}
+
 			$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-			$data = [
-			'title' => trim($_POST['title']),
-			'body' => trim($_POST['body']),
-			'user_id' =>$_SESSION['user_id'],
-			'title_err' => '',
-			'body_err' => ''
-		];		
-		if(empty($data['title'])){
-			$data['title_err'] = 'Please enter a title';
-		}
-		if(empty($data['body'])){
-			$data['body_err'] = 'Please enter the blog body text';
-		}
-
-		if(empty($data['title_err']) && empty($data['body_err'])){
-			//validated
-			if($this->postModel->addPost($data)){
-				flashMessage('post_message', 'Post Added');
-				redirect('posts');
-			}else
-			die('Something went wrong');
-		}else{
-			$this->view('posts/add', $data);
-		}
+				$data = [
+				'title' => trim($_POST['title']),
+				'body' => trim($_POST['body']),
+				'user_id' => $_SESSION['user_id'],
+				'privacy' => $_POST['privacy'],
+				'country' => $_POST['country'],
+				'sub_country' => $_POST['sub_country'],
+				'title_err' => '',
+				'body_err' => '',
+				'countries' => $countries,
+				'sub_countries' => $sub_country
+			];
 
 
+			if(empty($data['title'])){
+				$data['title_err'] = 'Please enter a title';
+			}
+			if(empty($data['body'])){
+				$data['body_err'] = 'Please enter the blog body text';
+			}
+
+			if(empty($data['title_err']) && empty($data['body_err'])){
+				//validated
+				if($this->postModel->addPost($data)){
+					$blogid = (int)$this->postModel->getLastPostId();
+
+					$data2 = [
+						'fileName' => $fileName,
+						'fileLocation' => $fileName,
+						'blog_id' => $blogid
+					];
+					$this->postModel->addImage($data2);
+					redirect('posts');
+				}else
+				die('Something went wrong');
+			}else{
+				var_dump($_FILES);
+				$this->view('posts/add', $data);
+			}
 		}
+
 		else{
 		$data = [
 			'title' => '',
-			'body' => ''
+			'body' => '',
+			'file_upload' => '',
+			'privacy' => '',
+			'country' => '',
+			'countries' => $countries,
+			'sub_countries' => $sub_country
 		];
 		$this->view('posts/add', $data);	
 		}
