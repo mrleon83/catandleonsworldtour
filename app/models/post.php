@@ -29,6 +29,48 @@ class post{
 		return $results;
 	}
 
+	public function addCountry($data){
+		if($data['select_country'] == 'new'){
+			$country = $data['country_input'];
+		}
+		else{
+			$country = $data['select_country'];
+		}
+
+		$this->db->query('INSERT INTO country (country) VALUES (:country)');
+		$this->db->bindValues(':country', $country);
+		if($this->db->execute()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public function addSubCountry($data){
+		if($data['select_subcountry'] == 'new'){
+			$subcountry = $data['subcountry_input'];
+		}
+		else{
+			$subcountry = $data['country_input'];
+		}
+		if($data['select_country'] == 'new'){
+			$this->db->query('SELECT MAX(id) as maxid FROM country');
+			$result = $this->db->getResultSingle();
+			$countryid = $result->maxid;
+		}
+		else{
+			$countryid = $data['select_country'];
+		}
+		$this->db->query('INSERT INTO sub_country (country_id, sub_country) VALUES (:country_id, :sub_country)');
+		$this->db->bindValues(':country_id', $countryid);
+		$this->db->bindValues(':sub_country', $subcountry);
+		if($this->db->execute()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
 	public function getSubCountries(){
 		$this->db->query('SELECT * FROM sub_country sc INNER JOIN country c ON c.id = sc.country_id');
 		$results = $this->db->getResultArray();
@@ -56,6 +98,11 @@ class post{
 		$this->db->query('SELECT MAX(id) as maxid FROM posts');
 		$result = $this->db->getResultSingle();
 		return $result->maxid;
+	}
+
+	public function addDates($data){
+
+
 	}
 
 	public function addImage($data){
@@ -105,5 +152,16 @@ class post{
 		return $row;
 	}
 
-
+	public function add_Dates($data){
+		$this->db->query('INSERT INTO dates (country_id, sub_country_id, date_from, date_to) VALUES (:country_id, :sub_country_id, :date_from, :date_to)');
+		$this->db->bindValues(':country_id', $data['select_country']);
+		$this->db->bindValues(':sub_country_id', $data['select_subcountry']);
+		$this->db->bindValues(':date_from', $data['datefrom']);
+		$this->db->bindValues(':date_to', $data['dateto']);
+		if($this->db->execute()){
+			return true;
+		}else{
+			return false;
+		}
+	}
 }

@@ -15,7 +15,7 @@
 			Written By <?php echo $post->name ?> on <?php echo $post->created ?>
 		</div>
 		<p class="card-text"><?php echo $post->body ?></p>
-		<p cass="card-text"><?php echo $post->file_location;?></p>
+		<p cass="card-text"><img src="app/<?php echo $post->file_location;?>" width="50%"></p>
 
 	</div> 
 <?php endforeach; ?>

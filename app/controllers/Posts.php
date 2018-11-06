@@ -71,7 +71,7 @@ class Posts extends Controller{
 
 					$data2 = [
 						'fileName' => $fileName,
-						'fileLocation' => $fileName,
+						'fileLocation' => $fileLocation,
 						'blog_id' => $blogid
 					];
 					$this->postModel->addImage($data2);
@@ -164,7 +164,6 @@ class Posts extends Controller{
     	}else{
     		redirect('post');
     	}
-
     }
 
 	public function show($id){
@@ -175,6 +174,72 @@ class Posts extends Controller{
 			'user' => $user
 		];
 		$this->view('posts/show', $data);
+	}
+
+	public function add_country(){
+		$countries = $this->postModel->getCountries();
+		$sub_country = $this->postModel->getSubCountries();
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+
+			$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+				$data = [
+				'select_country' => $_POST['select_country'],
+				'country_input' => $_POST['country_input'],
+				'select_subcountry' => $_POST['select_subcountry'],
+				'subcountry_input' => $_POST['subcountry_input']
+			];
+
+          // Validated
+		if($_POST['select_country'] == 'new'){
+			$this->postModel->addCountry($data);
+			$this->postModel->addSubCountry($data);
+			redirect('posts');
+		}
+          else if($_POST['select_country'] != 'new'){
+			$this->postModel->addSubCountry($data);
+            redirect('posts');
+          } else {
+            die('Something went wrong');
+          }
+      }else{
+				$data =[
+				'countries' => $countries,
+				'sub_country' => $sub_country
+			];
+
+		$this->view('posts/add_country', $data);
+		}
+
+	}
+
+	public function add_dates(){
+		$countries = $this->postModel->getCountries();
+		$sub_country = $this->postModel->getSubCountries();
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+			$_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+				$data = [
+				'select_country' => $_POST['select_country'],
+				'select_subcountry' => $_POST['select_subcountry'],
+				'datefrom' => $_POST['datefrom'],
+				'dateto' => $_POST['dateto']
+			];
+          // Validated
+		if($this->postModel->add_Dates($data)){
+			redirect('posts');
+		} else {
+            die('Something went wrong');
+          }
+      }else{
+				$data =[
+				'countries' => $countries,
+				'sub_country' => $sub_country
+			];
+
+		$this->view('posts/add_dates', $data);
+		}
+
 	}
 
 }
