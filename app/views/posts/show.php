@@ -1,4 +1,6 @@
-<?php require APPROOT . '/views/pages/includes/header.php'; ?>
+<?php require APPROOT . '/views/pages/includes/header.php'; 
+include('adminheader.php');
+?>
 <a href="<?php echo URLROOT; ?>/posts" class="btn btn-light"><i class="fa fa-backward"> Back</i></a>
 <h1><?php echo $data['post']->title; ?></h1>
 <br/>

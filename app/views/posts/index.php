@@ -31,7 +31,7 @@
 		</div>
 		<p class="card-text"><?php echo $post->body ?></p>
 		<p cass="card-text"><img src="app/<?php echo $post->file_location;?>" width="50%"></p>
-		<a href=" <?php URLROOT;?>posts/show/<?php echo $post->postid ?>" class="btn btn-dark">More</a>
+		<a href=" <?php URLROOT;?>posts/show/<?php echo $post->postid ?>" class="btn btn-dark">Edit/Delete</a>
 	</div>
 
 <?php endforeach; ?>

@@ -1,4 +1,6 @@
-<?php require APPROOT . '/views/pages/includes/header.php'; ?>
+<?php require APPROOT . '/views/pages/includes/header.php'; 
+include('adminheader.php');
+?>
 <a href="<?php echo URLROOT; ?>/posts" class="btn btn-light"><i class="fa fa-backward"> Back</i></a>
 	<div class="card card-body bg-light mt-5">
 		<h2>Add Blog Post</h2>
