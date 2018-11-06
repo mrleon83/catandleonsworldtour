@@ -29,6 +29,26 @@ class post{
 		return $results;
 	}
 
+	public function getSubCountries(){
+		$this->db->query('SELECT * FROM sub_country sc INNER JOIN country c ON c.id = sc.country_id');
+		$results = $this->db->getResultArray();
+		return $results;
+	}
+
+	public function getLastPostId(){
+		$this->db->query('SELECT MAX(id) as maxid FROM posts');
+		$result = $this->db->getResultSingle();
+		return $result->maxid;
+	}
+
+	public function getPostById($id){
+		$this->db->query('SELECT * FROM posts WHERE id = :id');
+		$this->db->bindValues(':id', $id);
+		$row = $this->db->getResultSingle();
+
+		return $row;
+	}
+
 	public function addCountry($data){
 		if($data['select_country'] == 'new'){
 			$country = $data['country_input'];
@@ -71,11 +91,7 @@ class post{
 		}
 	}
 
-	public function getSubCountries(){
-		$this->db->query('SELECT * FROM sub_country sc INNER JOIN country c ON c.id = sc.country_id');
-		$results = $this->db->getResultArray();
-		return $results;
-	}
+
 
 	public function addPost($data){
 
@@ -94,16 +110,7 @@ class post{
 		}	
 	}
 
-	public function getLastPostId(){
-		$this->db->query('SELECT MAX(id) as maxid FROM posts');
-		$result = $this->db->getResultSingle();
-		return $result->maxid;
-	}
 
-	public function addDates($data){
-
-
-	}
 
 	public function addImage($data){
 		$fileName =  $data['fileName'];
@@ -118,6 +125,19 @@ class post{
 				}else{
 					return false;
 				}	
+	}
+
+	public function add_Dates($data){
+		$this->db->query('INSERT INTO dates (country_id, sub_country_id, date_from, date_to) VALUES (:country_id, :sub_country_id, :date_from, :date_to)');
+		$this->db->bindValues(':country_id', $data['select_country']);
+		$this->db->bindValues(':sub_country_id', $data['select_subcountry']);
+		$this->db->bindValues(':date_from', $data['datefrom']);
+		$this->db->bindValues(':date_to', $data['dateto']);
+		if($this->db->execute()){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	public function updatePost($data){
@@ -144,24 +164,7 @@ class post{
 		}	
 	}
 
-	public function getPostById($id){
-		$this->db->query('SELECT * FROM posts WHERE id = :id');
-		$this->db->bindValues(':id', $id);
-		$row = $this->db->getResultSingle();
 
-		return $row;
-	}
 
-	public function add_Dates($data){
-		$this->db->query('INSERT INTO dates (country_id, sub_country_id, date_from, date_to) VALUES (:country_id, :sub_country_id, :date_from, :date_to)');
-		$this->db->bindValues(':country_id', $data['select_country']);
-		$this->db->bindValues(':sub_country_id', $data['select_subcountry']);
-		$this->db->bindValues(':date_from', $data['datefrom']);
-		$this->db->bindValues(':date_to', $data['dateto']);
-		if($this->db->execute()){
-			return true;
-		}else{
-			return false;
-		}
-	}
+
 }
